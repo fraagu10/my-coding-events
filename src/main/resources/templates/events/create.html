@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="fragments :: header"></head>
+
+<body class="container">
+<!--
+<p th:unless="${events} and ${events.size()}" style="color: red">No Events!</p>
+-->
+
+<form method="post" action="/events/create">
+   <div class="form-group">
+      <label>Event Name</label>
+      <input type="text" name="eventName" class="form-control">
+   </div>
+   <div>
+      <input type="submit" value="Create Event" class="btn btn-success">
+   </div>
+</form>
+
+</body>
+</html>

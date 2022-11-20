@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="fragments :: header"></head>
+
+<body class="container">
+
+<h1>All Events</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<th:block th:each="event : ${events}">
+   <li th:text="${event}"></li>
+</th:block>
+
+</body>
+</html>
