@@ -8,9 +8,22 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<th:block th:each="event : ${events}">
-   <li th:text="${event}"></li>
-</th:block>
+<table class="table">
+   <thead>
+      <tr>
+         <th>Event Name</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+   <th:block th:each="event : ${events}">
+      <tr>
+         <td th:text="${event.getKey()}"></td>
+         <td th:text="${event.getValue()}"></td>
+      </tr>
+   </th:block>
+   </tbody>
+</table>
 
 </body>
 </html>
