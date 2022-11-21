@@ -4,13 +4,22 @@
 
 <body class="container">
 
-<h1>All Events</h1>
-
 <nav th:replace="fragments :: navigation"></nav>
 
-<th:block th:each="event : ${events}">
-   <li th:text="${event}"></li>
-</th:block>
+<table class="table table-striped">
+   <thead>
+      <tr>
+         <th>Event Name</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr th:each="event : ${events}">
+         <td th:text="${event.name}"></td>
+         <td th:text="${event.description}"></td>
+      </tr>
+   </tbody>
+</table>
 
 </body>
 </html>
