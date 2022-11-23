@@ -2,7 +2,6 @@ package org.launchcode.mycodingevents.controllers;
 
 import org.launchcode.mycodingevents.data.EventData;
 import org.launchcode.mycodingevents.models.Event;
-import org.launchcode.mycodingevents.models.EventType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -26,8 +25,6 @@ public class EventController {
     public String displayCreateEventForm(Model model) {
         model.addAttribute("title", "Create Event");
         model.addAttribute(new Event());
-        // Will return an array of values in enum type to be used in template to render a dropdown menu.
-        model.addAttribute("types", EventType.values());
 
         return "events/create";
     }
