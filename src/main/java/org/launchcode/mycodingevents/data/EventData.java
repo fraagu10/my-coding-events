@@ -28,9 +28,7 @@ public class EventData {
 
     // Remove event that is specified by its id
     public static void remove(Integer id) {
-        if (events.containsKey(id)) {
-            events.remove(id);
-        }
+        events.remove(id);
     }
 
 }

@@ -7,16 +7,28 @@
 <p th:unless="${events} and ${events.size()}" style="color: red">No Events!</p>
 -->
 
-<form method="post" action="/events/create">
+<header th:replace="fragments :: navigation"></header>
+
+<form method="post">
    <div class="form-group">
-      <label>Event Name</label>
-      <input type="text" name="name" class="form-control">
+      <label>Name
+         <input th:field="${event.name}" class="form-control">
+      </label>
+      <p class="error" th:errors="${event.name}"></p>
    </div>
    <div class="form-group">
-      <label>Description</label>
-      <input type="text" name="description" class="form-control">
+      <label>Description
+         <input th:field="${event.description}" class="form-control">
+      </label>
+      <p class="error" th:errors="${event.description}"></p>
    </div>
-   <div>
+   <div class="form-group">
+      <label>Contact Email
+         <input th:field="${event.contactEmail}" class="form-control">
+      </label>
+      <p class="error" th:errors="${event.contactEmail}"></p>
+   </div>
+   <div class="form-group">
       <input type="submit" value="Create" class="btn btn-success">
    </div>
 </form>
