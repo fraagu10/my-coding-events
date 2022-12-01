@@ -1,17 +1,25 @@
 package org.launchcode.mycodingevents.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
+// Entity classes have two constructors.
+@Entity
 public class Event {
 
     // 2. In order to use EventType we need to create a property on Event class.
     // We need to also update constructor and getters and setters.
     private EventType type;
+
+    //
+    @Id
+    @GeneratedValue
     private int id;
-    private static int nextId = 1;
 
     @NotBlank(message = "Name is required")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
@@ -25,17 +33,14 @@ public class Event {
     private String contactEmail;
 
     public Event(String name, String description, String contactEmail, EventType type) {
-        this();
         this.name = name;
         this.description = description;
         this.contactEmail = contactEmail;
         this.type = type;
     }
 
-    public Event() {
-        this.id = nextId;
-        nextId++;
-    }
+    // Constructor used by JPA
+    public Event() {}
 
     public String getName() {
         return name;
