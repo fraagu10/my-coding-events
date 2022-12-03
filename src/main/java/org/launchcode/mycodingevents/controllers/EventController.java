@@ -1,8 +1,9 @@
 package org.launchcode.mycodingevents.controllers;
 
+import org.launchcode.mycodingevents.data.EventCategoryRepository;
 import org.launchcode.mycodingevents.data.EventRepository;
 import org.launchcode.mycodingevents.models.Event;
-import org.launchcode.mycodingevents.models.EventType;
+import org.launchcode.mycodingevents.models.EventCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,19 +11,38 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("events")
 public class EventController {
-
-    // Make repository available to class
-    // Dependency injection. What is it?
+    // Make repository available to class through dependency injection
     @Autowired
     private EventRepository eventRepository;
+
+    // Using repository to fetch all events.
+    @Autowired
+    private EventCategoryRepository eventCategoryRepository;
+
     @GetMapping
-    public String displayAllEvents(Model model) {
-        model.addAttribute("title", "All Events");
-        model.addAttribute("events", eventRepository.findAll());
+    public String displayAllEvents(Model model, @RequestParam(required = false) Integer categoryId) {
+        // Check to see if someone passed a field in. If null then display all events like we already were.
+        if(categoryId == null) {
+            model.addAttribute("title", "All Events");
+            model.addAttribute("events", eventRepository.findAll());
+        } else {
+            // A way for java to return something even when nothing is present
+            Optional<EventCategory> result = eventCategoryRepository.findById(categoryId);
+
+            if(result.isEmpty()) {
+                model.addAttribute("title", "Invalid Category ID: " + categoryId);
+            } else {
+                EventCategory category = result.get();
+                model.addAttribute("title", "Events in category: " + category.getName());
+                // Here is where we are testing our new code from new field
+                model.addAttribute("events", category.getEvents());
+            }
+        }
 
         return "events/index";
     }
@@ -31,8 +51,8 @@ public class EventController {
     public String displayCreateEventForm(Model model) {
         model.addAttribute("title", "Create Event");
         model.addAttribute(new Event());
-        // Will return an array of values in enum type to be used in template to render a dropdown menu.
-        model.addAttribute("types", EventType.values());
+        // Refactored to use our EventCategory Repository
+        model.addAttribute("categories", eventCategoryRepository.findAll());
 
         return "events/create";
     }
