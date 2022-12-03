@@ -69,7 +69,6 @@ public class EventController {
         return "redirect:";
     }
 
-    // Controller method to get a view to delete events.
     @GetMapping("delete")
     public String displayDeleteEventForm(Model model) {
         model.addAttribute("title", "Delete Events");
