@@ -17,7 +17,7 @@ public class EventDetails extends AbstractEntity {
     private String contactEmail;
 
     // Establish relationship for event details to know which event it is associated with:
-    // @OneToOne(mappedBy = "eventDetail")
+    @OneToOne(mappedBy = "eventDetails")
     private Event event;
 
     public EventDetails(String description, String contactEmail) {
