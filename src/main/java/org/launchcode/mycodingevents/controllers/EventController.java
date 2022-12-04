@@ -2,8 +2,11 @@ package org.launchcode.mycodingevents.controllers;
 
 import org.launchcode.mycodingevents.data.EventCategoryRepository;
 import org.launchcode.mycodingevents.data.EventRepository;
+import org.launchcode.mycodingevents.data.TagRepository;
 import org.launchcode.mycodingevents.models.Event;
 import org.launchcode.mycodingevents.models.EventCategory;
+import org.launchcode.mycodingevents.models.Tag;
+import org.launchcode.mycodingevents.models.dto.EventTagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +19,15 @@ import java.util.Optional;
 @Controller
 @RequestMapping("events")
 public class EventController {
-    // Make repository available to class through dependency injection
+
     @Autowired
     private EventRepository eventRepository;
 
-    // Using repository to fetch all events.
     @Autowired
     private EventCategoryRepository eventCategoryRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @GetMapping
     public String displayAllEvents(Model model, @RequestParam(required = false) Integer categoryId) {
@@ -100,9 +105,38 @@ public class EventController {
             Event event = result.get();
             model.addAttribute("title", event.getName() + " Details");
             model.addAttribute("event", event);
+            model.addAttribute("tags", event.getTags());
         }
 
         return "events/detail";
+    }
+
+    // responds to /events/add-tag?eventId=13
+    @GetMapping("add-tag")
+    public String displayAddTagForm(@RequestParam Integer eventId, Model model){
+        Optional<Event> result = eventRepository.findById(eventId);
+        Event event = result.get();
+        model.addAttribute("title", "Add Tag to: " + event.getName());
+        model.addAttribute("tags", tagRepository.findAll());
+        EventTagDTO eventTag = new EventTagDTO();
+        eventTag.setEvent(event);
+        model.addAttribute("eventTag", eventTag);
+        return "events/add-tag.html";
+    }
+
+    @PostMapping("add-tag")
+    public String processAddTagForm(@ModelAttribute @Valid EventTagDTO eventTag, Errors errors, Model model){
+        if (!errors.hasErrors()) {
+            Event event = eventTag.getEvent();
+            Tag tag = eventTag.getTag();
+            if (!event.getTags().contains(tag)){
+                event.addTag(tag);
+                eventRepository.save(event);
+            }
+            return "redirect:detail?eventId=" + event.getId();
+        }
+
+        return "redirect:add-tag";
     }
 
 }
